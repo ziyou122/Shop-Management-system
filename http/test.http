@@ -21,6 +21,8 @@ name=TEST
 <> 2021-03-03T112353.200.txt
 
 ###
+GET http://localhost:8880/test/list
+//Accept: application/json
 
 <> 2021-03-03T105839.200.json
 <> 2021-03-03T105824.400.html
