@@ -91,15 +91,12 @@ for (let i = 0; i < 23; i++) {
 export default defineComponent({
   name: 'Home',
   setup(){
-    console.log("setup");
     const ebooks = ref();
 
     onMounted(()=>{
-      console.log("unmounted")
       axios.get("/ebook/list1?").then(function (resp){
         const data = resp.data;
         ebooks.value = data.content;
-        console.log(resp);
       });
     })
     return {
