@@ -46,7 +46,7 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content
-        :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
+        :style="{ background: '#ffffff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       Content
     </a-layout-content>
@@ -55,11 +55,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
+  setup(){
+    console.log("setup");
+    axios.get("http://localhost:8880/ebook/list1?name=vue").then(function (resp){
+      console.log(resp);
+    })
+  }
 });
 </script>
