@@ -7,6 +7,7 @@ import com.wiki.wiki.req.EbookReq;
 import com.wiki.wiki.resp.EbookResp;
 import com.wiki.wiki.util.CopyUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,7 +23,9 @@ public class EbookService {
         //往后端mapper发送请求
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        criteria.andNameLike("%"+req.getName()+"%");
+        if(!ObjectUtils.isEmpty(req.getName())){
+            criteria.andNameLike("%"+req.getName()+"%");
+        }
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
         //往controller返回数据
