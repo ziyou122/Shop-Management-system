@@ -19,7 +19,7 @@ public class EbookController {
     private EbookService ebookService;
 
 
-    @GetMapping("/list1")
+    @GetMapping("/list")
     public CommonResp list(EbookReq req){
         CommonResp<List<EbookResp>> resp = new CommonResp<>();
         List<EbookResp> list = ebookService.list(req);
