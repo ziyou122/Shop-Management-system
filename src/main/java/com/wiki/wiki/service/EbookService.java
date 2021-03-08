@@ -7,6 +7,7 @@ import com.wiki.wiki.domain.EbookExample;
 import com.wiki.wiki.mapper.EbookMapper;
 import com.wiki.wiki.req.EbookReq;
 import com.wiki.wiki.resp.EbookResp;
+import com.wiki.wiki.resp.PageResp;
 import com.wiki.wiki.util.CopyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,14 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req){
+    public PageResp<EbookResp> list(EbookReq req){
         //往后端mapper发送请求
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())){
             criteria.andNameLike("%"+req.getName()+"%");
         }
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPage(),req.getSize());
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebooksList);
@@ -48,6 +49,9 @@ public class EbookService {
 
         //列表复制
         List<EbookResp> respList = CopyUtil.copyList(ebooksList,EbookResp.class);
-        return respList;
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(respList);
+        return pageResp;
     }
 }

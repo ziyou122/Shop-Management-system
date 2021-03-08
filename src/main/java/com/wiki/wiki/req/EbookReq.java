@@ -1,11 +1,9 @@
 package com.wiki.wiki.req;
 
-public class EbookReq {
+public class EbookReq extends PageReq{
     private Long id;
 
     private String name;
-
-
 
     public Long getId() {
         return id;
@@ -22,8 +20,6 @@ public class EbookReq {
     public void setName(String name) {
         this.name = name;
     }
-
-
 
     @Override
     public String toString() {
