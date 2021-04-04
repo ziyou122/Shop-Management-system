@@ -10,6 +10,7 @@ import com.wiki.wiki.req.EbookSaveReq;
 import com.wiki.wiki.resp.EbookQueryResp;
 import com.wiki.wiki.resp.PageResp;
 import com.wiki.wiki.util.CopyUtil;
+import com.wiki.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class EbookService {
     //用注解将EbookMapper注入
     @Resource
     private EbookMapper ebookMapper;
+
+    // 注入雪花算法工具类
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
         //往后端mapper发送请求
@@ -62,6 +67,10 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())) {
             // id为空 新增
+            ebook.setId( snowFlake.nextId());
+            ebook.setDocCount(0);
+            ebook.setViewCount(0);
+            ebook.setVoteCount(0);
             ebookMapper.insert(ebook);
         } else {
             // id存在，更新
