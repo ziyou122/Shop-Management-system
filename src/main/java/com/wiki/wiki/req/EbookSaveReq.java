@@ -1,12 +1,12 @@
 package com.wiki.wiki.req;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import javax.validation.constraints.NotBlank;
 
 public class EbookSaveReq {
-    @JsonSerialize(using= ToStringSerializer.class)
+
     private Long id;
 
+    @NotBlank(message = "【名称】不能为空")
     private String name;
 
     private Long category1Id;
