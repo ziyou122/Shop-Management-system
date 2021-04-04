@@ -49,6 +49,7 @@ public class EbookService {
 
         //列表复制
         List<EbookResp> respList = CopyUtil.copyList(ebooksList,EbookResp.class);
+
         PageResp<EbookResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(respList);

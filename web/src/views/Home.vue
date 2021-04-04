@@ -92,11 +92,11 @@ export default defineComponent({
   name: 'Home',
   setup(){
     const ebooks = ref();
-
+    console.log(ebooks)
     onMounted(()=>{
-      axios.get("/ebook/list1?").then(function (resp){
+      axios.get("/ebook/list?").then(function (resp){
         const data = resp.data;
-        ebooks.value = data.content;
+        ebooks.value = data.content.list;
       });
     })
     return {
