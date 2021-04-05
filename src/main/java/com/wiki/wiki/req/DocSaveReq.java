@@ -1,20 +1,21 @@
 package com.wiki.wiki.req;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class DocSaveReq {
     private Long id;
 
-    @NotBlank(message = "【电子书id】不能为空")
+    @NotNull(message = "【电子书id】不能为空")
     private Long ebookId;
 
-    @NotBlank(message = "【父id】不能为空")
+    @NotNull(message = "【父id】不能为空")
     private Long parent;
 
     @NotBlank(message = "【名称】不能为空")
     private String name;
 
-    @NotBlank(message = "【顺序】不能为空")
+    @NotNull(message = "【顺序】不能为空")
     private Integer sort;
 
     private Integer viewCount;
