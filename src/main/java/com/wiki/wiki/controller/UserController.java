@@ -60,6 +60,14 @@ public class UserController {
         return resp;
     }
 
+    @GetMapping("/logout/{token}")
+    public CommonResp delete(@PathVariable String token){
+        CommonResp resp = new CommonResp<>();
+        redisTemplate.delete(token);
+        LOG.info("从redis中删除token： {}", token);
+        return resp;
+    }
+
     // 修改密码
     @PostMapping("/reset-password")
     public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req){
