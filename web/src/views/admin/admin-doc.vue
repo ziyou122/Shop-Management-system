@@ -163,20 +163,16 @@ export default defineComponent({
     treeSelectData.value = [];
     const doc = ref();
     doc.value = {};
-    const modalVisible = ref(false);
-    const modalLoading = ref(false);
     const editor = new E('#content');
     editor.config.zIndex = 0;
 
     const handleSave = () => {
-      modalLoading.value = true;
       // console.log(doc.value)
       doc.value.content = editor.txt.html();
       axios.post("/doc/save", doc.value).then((response) => {
-        modalLoading.value = false;
         const data = response.data;
         if (data.success) {
-          modalVisible.value = false;
+          message.success("保存成功！");
           // 从新加载列表
           handleQuery();
         } else {
@@ -259,7 +255,8 @@ export default defineComponent({
 
     // 编辑
     const edit = (record: any) => {
-      modalVisible.value = true;
+      // 清空富文本框之前的内容
+      editor.txt.html("");
       doc.value = Tool.copy(record)
       handleQuerContent();
 
@@ -273,7 +270,9 @@ export default defineComponent({
 
     // 新增
     const add = (record: any) => {
-      modalVisible.value = true;
+      // 清空富文本框之前的内容
+      editor.txt.html("");
+      // 清空输入框之前的内容
       doc.value = {
         ebookId: route.query.ebookId
       };
@@ -282,9 +281,6 @@ export default defineComponent({
 
       // 为选择树添加一个"无"
       treeSelectData.value.unshift({id: 0, name: '无'});
-      setTimeout(() => {
-        editor.create();
-      }, 100);
     }
 
     // 删除
@@ -319,8 +315,6 @@ export default defineComponent({
 
       doc,
       param,
-      modalVisible,
-      modalLoading,
       handleSave
     }
   }
