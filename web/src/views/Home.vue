@@ -13,7 +13,7 @@
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id" :disabled="false">
           <template v-slot:title>
-            <span><user-outlined />{{item.name}}</span>
+              <span><user-outlined />{{item.name}}</span>
           </template>
           <a-menu-item v-for="child in item.children" :key="child.id">
             <MailOutlined /><span>{{child.name}}</span>
@@ -41,7 +41,9 @@
             </template>
             <a-list-item-meta :description="item.description">
               <template #title>
-                <a :href="item.href">{{ item.name }}</a>
+                <router-link :to="'/doc?ebookId=' + item.id">
+                  {{ item.name }}
+                </router-link>
               </template>
               <template #avatar><a-avatar :src="item.cover" /></template>
             </a-list-item-meta>

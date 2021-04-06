@@ -66,9 +66,10 @@ public class DocService {
         return pageResp;
     }
 
-    public List<DocQueryResp> all(){
+    public List<DocQueryResp> all(Long ebookId){
         //往后端mapper发送请求
         DocExample docExample = new DocExample();
+        docExample.createCriteria().andEbookIdEqualTo(ebookId);
         docExample.setOrderByClause("sort asc");
         List<Doc> docsList = docMapper.selectByExample(docExample);
 
