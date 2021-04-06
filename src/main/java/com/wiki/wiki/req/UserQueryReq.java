@@ -1,14 +1,8 @@
 package com.wiki.wiki.req;
 
 public class UserQueryReq extends PageReq{
-    private String loginName;
 
-    @Override
-    public String toString() {
-        return "UserQueryReq{" +
-                "loginName='" + loginName + '\'' +
-                "} " + super.toString();
-    }
+    private String loginName;
 
     public String getLoginName() {
         return loginName;
@@ -16,5 +10,12 @@ public class UserQueryReq extends PageReq{
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    @Override
+    public String toString() {
+        return "UserQueryReq{" +
+                "loginName='" + loginName + '\'' +
+                "} " + super.toString();
     }
 }

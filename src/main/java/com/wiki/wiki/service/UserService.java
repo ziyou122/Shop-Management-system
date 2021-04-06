@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wiki.wiki.domain.User;
 import com.wiki.wiki.domain.UserExample;
+import com.wiki.wiki.exception.BusinessException;
+import com.wiki.wiki.exception.BusinessExceptionCode;
 import com.wiki.wiki.mapper.UserMapper;
 import com.wiki.wiki.req.UserQueryReq;
 import com.wiki.wiki.req.UserSaveReq;
@@ -14,6 +16,7 @@ import com.wiki.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -63,18 +66,28 @@ public class UserService {
     }
 
     // 保存
+    /**
+     * 保存
+     */
     public void save(UserSaveReq req) {
         User user = CopyUtil.copy(req, User.class);
-        if(ObjectUtils.isEmpty(req.getId())) {
-            // id为空 新增
-            user.setId( snowFlake.nextId());
-//            user.setDocCount(0);
-//            user.setViewCount(0);
-//            user.setVoteCount(0);
-            userMapper.insert(user);
+        if (ObjectUtils.isEmpty(req.getId())) {
+            System.out.println(req.getLoginName());
+            User userDB = selectByLoginName(req.getLoginName());
+            System.out.println(userDB);
+            if (ObjectUtils.isEmpty(userDB)) {
+                // 新增
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            } else {
+                // 用户名已存在
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
         } else {
-            // id存在，更新
-            userMapper.updateByPrimaryKey(user);
+            // 更新
+            user.setLoginName(null);
+            user.setPassword(null);
+            userMapper.updateByPrimaryKeySelective(user);
         }
     }
 
@@ -83,4 +96,15 @@ public class UserService {
         userMapper.deleteByPrimaryKey(id);
     }
 
+    public User selectByLoginName(String LoginName) {
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(LoginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (CollectionUtils.isEmpty(userList)) {
+            return null;
+        } else {
+            return userList.get(0);
+        }
+    }
 }
