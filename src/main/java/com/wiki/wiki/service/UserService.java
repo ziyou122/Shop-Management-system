@@ -8,9 +8,10 @@ import com.wiki.wiki.exception.BusinessException;
 import com.wiki.wiki.exception.BusinessExceptionCode;
 import com.wiki.wiki.mapper.UserMapper;
 import com.wiki.wiki.req.UserQueryReq;
+import com.wiki.wiki.req.UserResetPasswordReq;
 import com.wiki.wiki.req.UserSaveReq;
-import com.wiki.wiki.resp.UserQueryResp;
 import com.wiki.wiki.resp.PageResp;
+import com.wiki.wiki.resp.UserQueryResp;
 import com.wiki.wiki.util.CopyUtil;
 import com.wiki.wiki.util.SnowFlake;
 import org.slf4j.Logger;
@@ -106,5 +107,11 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+
+    //
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
