@@ -2,8 +2,10 @@ package com.wiki.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wiki.wiki.domain.Content;
 import com.wiki.wiki.domain.Doc;
 import com.wiki.wiki.domain.DocExample;
+import com.wiki.wiki.mapper.ContentMapper;
 import com.wiki.wiki.mapper.DocMapper;
 import com.wiki.wiki.req.DocQueryReq;
 import com.wiki.wiki.req.DocSaveReq;
@@ -27,6 +29,9 @@ public class DocService {
     //用注解将DocMapper注入
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private ContentMapper contentMapper;
 
     // 注入雪花算法工具类
     @Resource
@@ -76,13 +81,21 @@ public class DocService {
     // 保存
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
+        Content content = CopyUtil.copy(req, Content.class);
         if(ObjectUtils.isEmpty(req.getId())) {
             // id为空 新增
             doc.setId( snowFlake.nextId());
             docMapper.insert(doc);
+            content.setId( doc.getId() );
+            contentMapper.insert(content);
         } else {
             // id存在，更新
             docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            // 若表中不存在id，说明doc表中有这个id，但是content没有，需要在content中插入
+            if (count == 0) {
+                contentMapper.insert(content);
+            }
         }
     }
 
@@ -90,6 +103,7 @@ public class DocService {
     public void delete(Long id) {
         docMapper.deleteByPrimaryKey(id);
     }
+
     public void delete(List<String> ids) {
         DocExample docExample = new DocExample();
         DocExample.Criteria criteria = docExample.createCriteria();
@@ -97,4 +111,12 @@ public class DocService {
         docMapper.deleteByExample(docExample);
     }
 
+    public String findContent(Long id) {
+        Content content = contentMapper.selectByPrimaryKey(id);
+        if (ObjectUtils.isEmpty(content)) {
+            return "";
+        } else {
+            return content.getContent();
+        }
+    }
 }
