@@ -7,6 +7,7 @@ import com.wiki.wiki.domain.Doc;
 import com.wiki.wiki.domain.DocExample;
 import com.wiki.wiki.mapper.ContentMapper;
 import com.wiki.wiki.mapper.DocMapper;
+import com.wiki.wiki.mapper.DocMapperCust;
 import com.wiki.wiki.req.DocQueryReq;
 import com.wiki.wiki.req.DocSaveReq;
 import com.wiki.wiki.resp.DocQueryResp;
@@ -29,6 +30,9 @@ public class DocService {
     //用注解将DocMapper注入
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private ContentMapper contentMapper;
@@ -86,6 +90,8 @@ public class DocService {
         if(ObjectUtils.isEmpty(req.getId())) {
             // id为空 新增
             doc.setId( snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
             content.setId( doc.getId() );
             contentMapper.insert(content);
@@ -114,6 +120,8 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        // 文档阅读数+1
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         } else {
