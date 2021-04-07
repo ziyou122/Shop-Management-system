@@ -60,4 +60,12 @@ public class DocController {
         resp.setContent(content);
         return resp;
     }
+
+    @GetMapping("/vote/{id}")
+    public CommonResp vote(@PathVariable Long id) {
+        CommonResp resp = new CommonResp<>();
+        docService.vote(id);
+        return resp;
+    }
+
 }

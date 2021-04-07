@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.wiki.wiki.domain.Content;
 import com.wiki.wiki.domain.Doc;
 import com.wiki.wiki.domain.DocExample;
+import com.wiki.wiki.exception.BusinessException;
+import com.wiki.wiki.exception.BusinessExceptionCode;
 import com.wiki.wiki.mapper.ContentMapper;
 import com.wiki.wiki.mapper.DocMapper;
 import com.wiki.wiki.mapper.DocMapperCust;
@@ -13,6 +15,8 @@ import com.wiki.wiki.req.DocSaveReq;
 import com.wiki.wiki.resp.DocQueryResp;
 import com.wiki.wiki.resp.PageResp;
 import com.wiki.wiki.util.CopyUtil;
+import com.wiki.wiki.util.RedisUtil;
+import com.wiki.wiki.util.RequestContext;
 import com.wiki.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +40,9 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     // 注入雪花算法工具类
     @Resource
@@ -126,6 +133,17 @@ public class DocService {
             return "";
         } else {
             return content.getContent();
+        }
+    }
+
+    // 点赞
+    public void vote(Long id) {
+        // 远程IP + doc.id 作为key，24小时内不重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
     }
 }
