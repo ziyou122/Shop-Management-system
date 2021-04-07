@@ -15,14 +15,14 @@
           </a-tree>
         </a-col>
         <a-col :span="18">
-<!--          <div>-->
-<!--            <h2>{{doc.name}}</h2>-->
-<!--            <div>-->
-<!--              <span>阅读数：{{doc.viewCount}}</span> &nbsp; &nbsp;-->
-<!--              <span>点赞数：{{doc.voteCount}}</span>-->
-<!--            </div>-->
-<!--            <a-divider style="height: 2px; background-color: #9999cc"/>-->
-<!--          </div>-->
+          <div>
+            <h2>{{doc.name}}</h2>
+            <div>
+              <span>阅读数：{{doc.viewCount}}</span> &nbsp; &nbsp;
+              <span>点赞数：{{doc.voteCount}}</span>
+            </div>
+            <a-divider style="height: 2px; background-color: #9999cc"/>
+          </div>
 <!--          <div class="wangeditor" :innerHTML="html"></div>-->
 <!--          <div class="vote-div">-->
 <!--            <a-button type="primary" shape="round" :size="'large'" @click="vote">-->
@@ -48,10 +48,13 @@
     setup() {
       const route = useRoute();
       const docs = ref();
-      const doc = ref();
       const html = ref();
       const defaultSelectedKeys = ref();
       defaultSelectedKeys.value = [];
+
+      // 当前选中的文档
+      const doc = ref();
+      doc.value= {};
 
       const level1 = ref(); // 一级文档树，children属性就是二级文档
       level1.value = [];
@@ -98,7 +101,7 @@
         console.log('selected', selectedKeys, info);
         if (Tool.isNotEmpty(selectedKeys)) {
           // 选中某一节点时，加载该节点的文档信息
-          // doc.value = info.selectedNodes[0].props;
+          doc.value = info.selectedNodes[0].props;
           // 加载内容
           handleQueryContent(selectedKeys[0]);
         }
@@ -112,7 +115,8 @@
         level1,
         html,
         onSelect,
-        defaultSelectedKeys
+        defaultSelectedKeys,
+        doc
       }
     }
 
