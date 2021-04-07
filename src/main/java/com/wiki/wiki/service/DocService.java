@@ -18,6 +18,7 @@ import com.wiki.wiki.util.CopyUtil;
 import com.wiki.wiki.util.RedisUtil;
 import com.wiki.wiki.util.RequestContext;
 import com.wiki.wiki.util.SnowFlake;
+import com.wiki.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,9 @@ public class DocService {
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Resource
+    private WebSocketServer webSocketServer;
 
     // 注入雪花算法工具类
     @Resource
@@ -145,6 +149,10 @@ public class DocService {
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        // 推送消息
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+        webSocketServer.sendInfo("【" + docDb.getName() + "】被点赞！");
     }
 
     public void updateEbookInfo() {
