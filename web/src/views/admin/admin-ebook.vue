@@ -126,11 +126,11 @@ export default defineComponent({
         dataIndex: 'docCount'
       },
       {
-        title: '阅读数',
+        title: '浏览数',
         dataIndex: 'viewCount'
       },
       {
-        title: '点赞数',
+        title: '销售量',
         dataIndex: 'voteCount'
       },
       {

@@ -6,7 +6,7 @@
       <p>
         <a-form layout="inline" :model="param">
           <a-form-item>
-            <a-input v-model:value="param.loginName" placeholder="登陆名">
+            <a-input v-model:value="param.loginName" placeholder="登录名">
             </a-input>
           </a-form-item>
           <a-form-item>
@@ -110,7 +110,7 @@ export default defineComponent({
 
     const columns = [
       {
-        title: '登陆名',
+        title: '登录名',
         dataIndex: 'loginName'
       },
       {

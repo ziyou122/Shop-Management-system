@@ -32,7 +32,7 @@
               </a-statistic>
             </a-col>
             <a-col :span="8">
-              <a-statistic title="购买率" :value="statistic.voteCount / statistic.viewCount * 100"
+              <a-statistic title="购买率 (购买量/浏览量)" :value="statistic.voteCount / statistic.viewCount * 100"
                            :precision="2"
                            suffix="%"
                            :value-style="{ color: '#cf1322' }">

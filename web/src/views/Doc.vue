@@ -18,15 +18,15 @@
           <div>
             <h2>{{doc.name}}</h2>
             <div>
-              <span>阅读数：{{doc.viewCount}}</span> &nbsp; &nbsp;
-              <span>点赞数：{{doc.voteCount}}</span>
+              <span>浏览量：{{doc.viewCount}}</span> &nbsp; &nbsp;
+              <span>分享量：{{doc.voteCount}}</span>
             </div>
             <a-divider style="height: 2px; background-color: #9999cc"/>
           </div>
           <div class="wangeditor" :innerHTML="html"></div>
           <div class="vote-div">
             <a-button type="primary" shape="round" :size="'large'" @click="vote">
-              <template #icon><LikeOutlined /> &nbsp;点赞：{{doc.voteCount}} </template>
+              <template #icon><LikeOutlined /> &nbsp;分享：{{doc.voteCount}} </template>
             </a-button>
           </div>
         </a-col>

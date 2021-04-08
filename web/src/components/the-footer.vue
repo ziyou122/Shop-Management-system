@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    wiki ebook
+    商铺后台管理系统
   </a-layout-footer>
 </template>
 
